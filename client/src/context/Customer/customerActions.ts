@@ -13,5 +13,28 @@ export const customerActions = {
       if (err instanceof Error) errMessage = err.message;
       dispatch({ type: "@@CUSTOMER/FETCH_FAILURE", payload: errMessage });
     }
+  },
+
+  updateCustomer: (customer: Customer): AsyncAction => async (dispatch) => {
+    console.log(customer)
+    dispatch({ type: "@@CUSTOMER/UPDATE_PENDING" });
+    try {
+      dispatch({ type: "@@CUSTOMER/UPDATE_SUCCESS", payload: customer });
+    } catch (err) {
+      let errMessage = "unknown error";
+      if (err instanceof Error) errMessage = err.message;
+      dispatch({ type: "@@CUSTOMER/UPDATE_FAILURE", payload: errMessage });
+    }
+  },
+
+  deleteCustomer: (customer: Customer): AsyncAction => async (dispatch) => {
+    dispatch({ type: "@@CUSTOMER/DELETE_PENDING" });
+    try {
+      dispatch({ type: "@@CUSTOMER/DELETE_SUCCESS", payload: customer });
+    } catch (err) {
+      let errMessage = "unknown error";
+      if (err instanceof Error) errMessage = err.message;
+      dispatch({ type: "@@CUSTOMER/DELETE_FAILURE", payload: errMessage });
+    }
   }
 }

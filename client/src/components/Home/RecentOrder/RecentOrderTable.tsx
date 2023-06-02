@@ -25,7 +25,7 @@ function RecentOrderTable(props: Props) {
     if (customerMarker?.currentBook) {
       console.log("changed marker", customerMarker?.name);
       const recents = customerMarker.books.find(book => book.id === customerMarker.currentBook)?.recents;
-      dispatch(recentOrderActions.createRecentOrder(recents || [], customerMarker));
+      dispatch(recentOrderActions.fetchRecentOrder(recents || []));
     }
   }, [customerMarker?.currentBook]);
 

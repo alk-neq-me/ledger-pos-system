@@ -1,18 +1,22 @@
-import { Customer } from "../Customer/types";
 import { AsyncAction } from "../store";
 import { NumbersOrder } from "./types";
 
 
 export const recentOrderActions = {
-  createRecentOrder: (orders: NumbersOrder[], marker: Customer): AsyncAction => async (dispatch) => {
-    dispatch({ type: "@@NUMBER_ORDER/CREATE_PENDING" });
-    dispatch({ type: "@@CUSTOMER/UPDATE_PENDING" });
+  fetchRecentOrder: (orders: NumbersOrder[]): AsyncAction => async (dispatch) => {
+    dispatch({ type: "@@NUMBER_ORDER/FETCH_PENDING" });
     try {
-      const newMarker = { ...marker }
-      newMarker.books.find(book => book.id === marker.currentBook)?.recents.push(...orders);
+      dispatch({ type: "@@NUMBER_ORDER/FETCH_SUCCESS", payload: orders });
+    } catch (err) {
+      if (err instanceof Error) dispatch({ type: "@@NUMBER_ORDER/FETCH_FAILURE", payload: err.message });
+      dispatch({ type: "@@NUMBER_ORDER/FETCH_FAILURE", payload: "unknown error" });
+    }
+  },
+
+  createRecentOrder: (orders: NumbersOrder[]): AsyncAction => async (dispatch) => {
+    dispatch({ type: "@@NUMBER_ORDER/CREATE_PENDING" });
+    try {
       dispatch({ type: "@@NUMBER_ORDER/CREATE_SUCCESS", payload: orders });
-      // dispatch({ type: "@@CUSTOMER/UPDATE_SUCCESS", payload: marker });
-      console.log(newMarker)
     } catch (err) {
       if (err instanceof Error) dispatch({ type: "@@NUMBER_ORDER/CREATE_FAILURE", payload: err.message });
       dispatch({ type: "@@NUMBER_ORDER/CREATE_FAILURE", payload: "unknown error" });

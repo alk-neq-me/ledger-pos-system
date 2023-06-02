@@ -26,6 +26,7 @@ export default function recentOrderReducer(
     case "@@NUMBER_ORDER/FETCH_SUCCESS":
       return {
         ...state,
+        loading: false,
         rows: "payload" in action
           ? Array.isArray(action.payload)
             ? action.payload

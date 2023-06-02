@@ -49,7 +49,15 @@ export default function customerReducer(
       };
 
     case "@@CUSTOMER/DELETE_SUCCESS":
-      return state;
+      return {
+        ...state,
+        loading: false,
+        rows: "payload" in action
+          ? typeof action.payload === "object"
+            ? state.rows.filter(row => row.id !== (action.payload as Customer).id)
+            : state.rows
+          : state.rows
+      };
 
     case "@@CUSTOMER/FETCH_FAILURE":
     case "@@CUSTOMER/CREATE_FAILURE":

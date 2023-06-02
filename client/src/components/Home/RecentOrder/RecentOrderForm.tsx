@@ -5,6 +5,7 @@ import { ZodType, infer as zodInfer, number, object, string, date } from 'zod';
 import { NumbersOrder } from '../../../context/RecentOrder/types';
 import { useTypedDispatch, useTypedSelector } from '../../../context/store';
 import { recentOrderActions } from '../../../context/RecentOrder/recentOrderActions';
+import { updateRecentToCustomer } from '../../../context/Customer/helpers/updateMarker';
 
 
 const LEDGER_MODE: "2" | "3" = "2";
@@ -34,13 +35,16 @@ function RecentOrder() {
   const { customerMarker } = useTypedSelector(state => state.marker);
   const dispatch = useTypedDispatch();
 
+  const onUpdateCustomerRecent = updateRecentToCustomer(dispatch);
+
   const { formState: {errors} } = method;
 
   const disabledForm = customerMarker === undefined;
 
   const onSubmit: SubmitHandler<CreateOrderRecentInput> = (value) => {
-    console.log(value)
+    if (!customerMarker) throw new Error("Please Chosse marker first")
     dispatch(recentOrderActions.createRecentOrder([value]));
+    onUpdateCustomerRecent(customerMarker, value);
   }
 
   return (
@@ -53,6 +57,8 @@ function RecentOrder() {
 
         <Button type="submit" isDisabled={disabledForm}>Save</Button>
         <Button type="button" onClick={() => method.reset()}>Cancel</Button>
+
+        <Button type="button" onClick={() => console.log(customerMarker)}>Log</Button>
       </FormControl>
     </VStack>
   )
