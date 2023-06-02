@@ -1,13 +1,9 @@
 import { Button, HStack, VStack, Text } from '@chakra-ui/react';
 
 import { useCallback, useEffect } from 'react';
-import { createNumbeTable } from '../../utils/createNumberTable';
-import { createOrderRecent } from '../../utils/createOrderRecent';
-import { brosFunc, newFunc } from '../../utils/formulaFunctions';
 import Table, { Columns } from '../../components/Table';
 import { useTypedDispatch, useTypedSelector } from '../../context/store';
 import { recentOrderActions } from '../../context/RecentOrder/recentOrderActions';
-import { totalNumberTable } from '../../utils/totalNumberTable';
 import RecentOrderTable from '../../components/Home/RecentOrder/RecentOrderTable';
 import RecentOrderForm from '../../components/Home/RecentOrder/RecentOrderForm';
 import PermissionRequired from '../../helpers/permissionRequired';
@@ -15,6 +11,7 @@ import { customerMarkerActions } from '../../context/CustomerMarker/customerMark
 import { numberTableActions } from '../../context/NumberTable/numberTableActions';
 import { NumbersTable } from '../../context/NumberTable/types';
 import { customerActions } from '../../context/Customer/customerActions';
+import { brosFunc, createNumbeTable, createOrderRecent, newFunc, totalNumberTable } from '../../utils';
 
 
 const LEDGER_MODE: "2" | "3" = "2";
@@ -56,12 +53,12 @@ function MainTable() {
 
   const onOrderBros = useCallback(() => {
     const newOrder = createOrderRecent(brosFunc, 200);
-    if (!disabled) dispatch(recentOrderActions.createRecentOrder(newOrder, customerMarker));
+    dispatch(recentOrderActions.createRecentOrder(newOrder));
   }, [customerMarker?.currentBook]);
 
   const onOrderNew = useCallback(() => {
     const newOrder = createOrderRecent(newFunc, 250);
-    if (!disabled) dispatch(recentOrderActions.createRecentOrder(newOrder, customerMarker));
+    dispatch(recentOrderActions.createRecentOrder(newOrder));
   }, [customerMarker?.currentBook]);
 
   const onSaveRecents = useCallback(() => {
