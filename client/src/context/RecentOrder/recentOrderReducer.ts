@@ -4,6 +4,10 @@ import { ActionPayload } from "../types";
 const initialState: NumberOrderState = {
   loading: false,
   error: undefined,
+  pagination: {
+    limit: 10,
+    offset: 0
+  },
   rows: []
 }
 

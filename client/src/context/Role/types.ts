@@ -1,4 +1,5 @@
 import { Role } from "../../utils/permission"
+import { CRUDActions } from "../types"
 
 export type RoleState = {
   loading: boolean,
@@ -6,19 +7,6 @@ export type RoleState = {
   rows: Role[]
 }
 
-export type RoleAction =
-  | "@@ROLE/FETCH_PENDING"
-  | "@@ROLE/FETCH_FAILURE"
-  | "@@ROLE/FETCH_SUCCESS"
+export type RolePrefix = "@@ROLE"
 
-  | "@@ROLE/CREATE_PENDING"
-  | "@@ROLE/CREATE_FAILURE"
-  | "@@ROLE/CREATE_SUCCESS"
-
-  | "@@ROLE/UPDATE_PENDING"
-  | "@@ROLE/UPDATE_FAILURE"
-  | "@@ROLE/UPDATE_SUCCESS"
-
-  | "@@ROLE/DELETE_PENDING"
-  | "@@ROLE/DELETE_FAILURE"
-  | "@@ROLE/DELETE_SUCCESS"
+export type RoleAction = CRUDActions<RolePrefix>

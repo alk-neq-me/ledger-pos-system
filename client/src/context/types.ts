@@ -18,6 +18,55 @@ export type RootState = {
   roles: RoleState
 }
 
+export type Pagination = {
+  limit: number,
+  offset: number
+}
+
+export type BaseModel = {
+  id: string,
+  createdAt: Date,
+  updatedAt: Date,
+}
+
+export type ReadAction<P extends string> =
+ | `${P}/FETCH_PENDING`
+ | `${P}/FETCH_SUCCESS`
+ | `${P}/FETCH_FAILURE`
+
+export type CreateAction<P extends string> =
+ | `${P}/CREATE_PENDING`
+ | `${P}/CREATE_SUCCESS`
+ | `${P}/CREATE_FAILURE`
+
+export type UpdateAction<P extends string> =
+ | `${P}/UPDATE_PENDING`
+ | `${P}/UPDATE_SUCCESS`
+ | `${P}/UPDATE_FAILURE`
+
+export type DeleteAction<P extends string> =
+ | `${P}/DELETE_PENDING`
+ | `${P}/DELETE_SUCCESS`
+ | `${P}/DELETE_FAILURE`
+
+export type ChangePaginationAction<P extends string> =
+  | `${P}/CHANGE_PAGINATION_PENDING`
+  | `${P}/CHANGE_PAGINATION_SUCCESS`
+  | `${P}/CHANGE_PAGINATION_FAILURE`
+
+export type CRUDActions<P extends string> =
+  | CreateAction<P>
+  | ReadAction<P>
+  | UpdateAction<P>
+  | DeleteAction<P>
+
+export type BaseState<T extends object> = {
+  loading: boolean,
+  error?: undefined | string,
+  filter?: Partial<T>,
+  pagination: Pagination,
+}
+
 export type ActionPayload<T, P> = 
   | { type: T }
   | { type: T, payload: P }

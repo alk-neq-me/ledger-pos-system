@@ -1,22 +1,25 @@
-import { generateNumbers } from "../../utils/generateNumers";
-import { ActionPayload } from "../types";
+import { ActionPayload, Pagination } from "../types";
 import { NumbersTable, NumbersTableAction, NumbersTableState } from "./types";
-
-const LEDGER_MODE: "2" | "3" = "2";
 
 const initialState: NumbersTableState = {
   loading: false,
   error: undefined,
-  rows: generateNumbers(LEDGER_MODE)
+  filter: undefined,
+  pagination: {
+    limit: 10,
+    offset: 0
+  },
+  rows: [],
 }
 
 export default function(
   state: NumbersTableState = initialState,
-  action: ActionPayload<NumbersTableAction, NumbersTable[] | string>
+  action: ActionPayload<NumbersTableAction, NumbersTable[] | string | Pagination>
 ): NumbersTableState {
   switch (action.type) {
     case "@@NUMBER_TABLE/FETCH_PENDING":
     case "@@NUMBER_TABLE/DELETE_PENDING":
+    case "@@NUMBER_TABLE/CHANGE_PAGINATION_PENDING":
       return {
         ...state,
         loading: true,
@@ -35,10 +38,15 @@ export default function(
       }
 
     case "@@NUMBER_TABLE/DELETE_SUCCESS":
-      return state;
+      return {
+        ...state,
+        loading: false,
+        rows: []
+      };
 
     case "@@NUMBER_TABLE/FETCH_FAILURE":
     case "@@NUMBER_TABLE/DELETE_FAILURE":
+    case "@@NUMBER_TABLE/CHANGE_PAGINATION_FAILURE":
       return {
         ...state,
         loading: false,
@@ -49,7 +57,19 @@ export default function(
           : "unknown error"
       }
 
+    case "@@NUMBER_TABLE/CHANGE_PAGINATION_SUCCESS":
+      return {
+        ...state,
+        loading: false,
+        pagination: "payload" in action
+          ? typeof action.payload === "object" && !Array.isArray(action.payload)
+            ? action.payload
+            : state.pagination
+          : state.pagination
+      }
+
     default:
+      // const _unreachable: never = action.type;
       return state;
   }
 }

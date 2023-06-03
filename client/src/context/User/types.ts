@@ -1,4 +1,5 @@
 import { SystemRoleEnum } from "../../utils/permission"
+import { CRUDActions } from "../types"
 
 export type User = {
   id: string,
@@ -10,6 +11,7 @@ export type User = {
   role: SystemRoleEnum
 }
 
+export type UserPrefix = "@@USER"
 
 export type UserState = {
   loading: boolean,
@@ -18,20 +20,4 @@ export type UserState = {
 }
 
 
-export type UserAction = 
-  | "@@USER/FETCH_PENDING"
-  | "@@USER/FETCH_FAILURE"
-  | "@@USER/FETCH_SUCCESS"
-
-  | "@@USER/CREATE_PENDING"
-  | "@@USER/CREATE_FAILURE"
-  | "@@USER/CREATE_SUCCESS"
-
-  | "@@USER/UPDATE_PENDING"
-  | "@@USER/UPDATE_FAILURE"
-  | "@@USER/UPDATE_SUCCESS"
-
-  | "@@USER/DELETE_PENDING"
-  | "@@USER/DELETE_FAILURE"
-  | "@@USER/DELETE_SUCCESS"
-  
+export type UserAction = CRUDActions<UserPrefix>

@@ -1,23 +1,17 @@
+import { BaseModel, BaseState, ChangePaginationAction, DeleteAction, ReadAction } from "../types"
+
+export type NumbersTablePrefix = "@@NUMBER_TABLE"
+
 export type NumbersTable = {
-  id: string,
   number: string,
   total: number,
-  createdAt: Date,
-  updatedAt: Date,
-}
+} & BaseModel
 
 export type NumbersTableState = {
-  loading: boolean,
-  error?: undefined | string,
   rows: NumbersTable[]
-}
+} & BaseState<NumbersTable>
 
 export type NumbersTableAction = 
-  | "@@NUMBER_TABLE/FETCH_PENDING"
-  | "@@NUMBER_TABLE/FETCH_FAILURE"
-  | "@@NUMBER_TABLE/FETCH_SUCCESS"
-
-  | "@@NUMBER_TABLE/DELETE_PENDING"
-  | "@@NUMBER_TABLE/DELETE_FAILURE"
-  | "@@NUMBER_TABLE/DELETE_SUCCESS"
-  
+  | ReadAction<NumbersTablePrefix>
+  | DeleteAction<NumbersTablePrefix>
+  | ChangePaginationAction<NumbersTablePrefix>

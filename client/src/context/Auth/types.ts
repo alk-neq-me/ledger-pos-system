@@ -1,5 +1,7 @@
 import { User } from "../User/types"
 
+export type AuthPrefix = "@@AUTH";
+
 export type AuthState = {
   loading: boolean,
   error?: undefined | string,
@@ -7,14 +9,14 @@ export type AuthState = {
 }
 
 export type AuthAction = 
-  | "@@AUTH/LOGIN_PENDING"
-  | "@@AUTH/LOGIN_SUCCESS"
-  | "@@AUTH/LOGIN_FAILURE"
+  | `${AuthPrefix}/LOGIN_PENDING`
+  | `${AuthPrefix}/LOGIN_SUCCESS`
+  | `${AuthPrefix}/LOGIN_FAILURE`
 
-  | "@@AUTH/REGISTER_PENDING"
-  | "@@AUTH/REGISTER_SUCCESS"
-  | "@@AUTH/REGISTER_FAILURE"
+  | `${AuthPrefix}/REGISTER_PENDING`
+  | `${AuthPrefix}/REGISTER_SUCCESS`
+  | `${AuthPrefix}/REGISTER_FAILURE`
 
-  | "@@AUTH/LOGOUT_PENDING"
-  | "@@AUTH/LOGOUT_SUCCESS"
-  | "@@AUTH/LOGOUT_FAILURE"
+  | `${AuthPrefix}/LOGOUT_PENDING`
+  | `${AuthPrefix}/LOGOUT_SUCCESS`
+  | `${AuthPrefix}/LOGOUT_FAILURE`

@@ -1,6 +1,8 @@
-import { TableContainer, Table as ChakraTable, Thead, Td, Th, Tr, Tbody, Text, TableContainerProps, IconButton, Checkbox, HStack } from "@chakra-ui/react"
+import { TableContainer, Table as ChakraTable, Thead, Td, Th, Tr, Tbody, Text, TableContainerProps, IconButton, Checkbox, HStack, Box } from "@chakra-ui/react"
 import { useCallback, useState } from "react";
 import { numberFormat } from "../utils/numberFormat";
+import { Pagination } from "../context/types";
+import PaginateButton from "./PaginateButton";
 
 
 export type Columns<T> = {
@@ -18,15 +20,17 @@ interface Props<T> extends TableContainerProps {
   header: string,
   footer?: string,
   columns: Columns<T>[],
-  rows: T[]
+  rows: T[],
+  pagination: Pagination
 }
 
 function Table<T extends {id: string}>(props: Props<T>) {
-  const { header, columns, onDeleteAction, rows, footer, ...reset } = props;
+  const { header, columns, onDeleteAction, rows, footer, pagination, ...reset } = props;
 
   const [sortBy, setSortBy] = useState<keyof T | undefined>(undefined);
   const [desc, setDesc] = useState(false);
   const [selectedRowsId, setSelectedRowsId] = useState<string[]>([]);
+  const [currentPage, setCurrentPage] = useState(0);
 
   const showColumns = (col: Columns<T>) => !col.hiddenColumn;
 
@@ -36,12 +40,19 @@ function Table<T extends {id: string}>(props: Props<T>) {
 
   const isInputElement = selectedRowsId.length >= 1 && !allChecked;
 
+  const getPaginatedRows = useCallback(() => {
+    const idx = pagination.limit * currentPage;
+    return rows.slice(idx, idx + pagination.limit);
+  }, [currentPage, pagination])
+
+  const paginated = getPaginatedRows()
+
   const onSort = (dataIndex: keyof T) => () => {
     setSortBy(dataIndex);
     setDesc(d => !d);
   };
 
-  if (sortBy) rows.sort((a, b) => {
+  if (sortBy) paginated.sort((a, b) => {
     if (typeof a[sortBy] === "string" && desc) return (a[sortBy] as string).length - (b[sortBy] as string).length
     if (typeof a[sortBy] === "number" && desc) return (a[sortBy] as number) - (b[sortBy] as number)
 
@@ -75,55 +86,72 @@ function Table<T extends {id: string}>(props: Props<T>) {
     }
   }, [selectedRowsId]);
 
+  const onChangePaginate = (idx: string|number) => () => {
+    setCurrentPage(Number(idx))
+  }
+
+
   return (
-    <TableContainer borderWidth={1} borderColor="gray.100" borderRadius={10} maxH="lg" overflowY="scroll" {...reset}>
+    <Box borderWidth={1} borderColor="gray.100" borderRadius={10}>
       <HStack justifyContent="space-between" px={5} py={3}>
         <Text fontSize="2xl">{header}</Text>
         { selectedRowsId.length && <IconButton aria-label="delete button" onClick={onDelete}></IconButton>}
       </HStack>
-      <ChakraTable>
-        <Thead>
-          <Tr>
-            { onDeleteAction &&
-              <Td w={1}>
-                <Checkbox isChecked={allChecked} isIndeterminate={isInputElement} onChange={onselectAll} />
-              </Td>
-            }
-            {columns.filter(showColumns).map((column, index) => (
-              <Th key={index} textAlign={column.align}>
-                {column.title}
-                {column.sorter && <IconButton aria-label="sort" onClick={onSort(column.dataIndex)}></IconButton>}
-              </Th>
-            ))}
-          </Tr>
-        </Thead>
-        <Tbody>
-          {rows.map((row, key) => (
-            <Tr key={key} bg={isChecked(row.id) ? "blue.50" : ""}>
+      <TableContainer maxH="lg" overflowY="scroll" {...reset}>
+        <ChakraTable>
+          <Thead>
+            <Tr>
               { onDeleteAction &&
-                <Td>
-                  <Checkbox isChecked={isChecked(row.id)} onChange={onSelectByEach(row.id)} />
+                <Td w={1}>
+                  <Checkbox isChecked={allChecked} isIndeterminate={isInputElement} onChange={onselectAll} />
                 </Td>
               }
-              {columns.filter(showColumns).map((column, index) => {
-                if (!column.render) return (
-                  <Td key={index} textAlign={column.align}>
-                    {/* @ts-ignore */}
-                    {(column.isNumber) && (typeof row[column.dataIndex] === "number") ? numberFormat(row[column.dataIndex]) : row[column.dataIndex]}
-                  </Td>
-                )
-                return (
-                  <Td key={index} textAlign={column.align}>
-                    {column.render(row)}
-                  </Td>
-                )
-              })}
+              {columns.filter(showColumns).map((column, index) => (
+                <Th key={index} textAlign={column.align}>
+                  {column.title}
+                  {column.sorter && <IconButton aria-label="sort" onClick={onSort(column.dataIndex)}></IconButton>}
+                </Th>
+              ))}
             </Tr>
-          ))}
-        </Tbody>
-      </ChakraTable>
-      { footer && <Text fontSize="2xl" px={5} py={3}>{footer}</Text>}
-    </TableContainer>
+          </Thead>
+          <Tbody>
+            {paginated.map((row, key) => (
+              <Tr key={key} bg={isChecked(row.id) ? "blue.50" : ""}>
+                { onDeleteAction &&
+                  <Td>
+                    <Checkbox isChecked={isChecked(row.id)} onChange={onSelectByEach(row.id)} />
+                  </Td>
+                }
+                {columns.filter(showColumns).map((column, index) => {
+                  if (!column.render) return (
+                    <Td key={index} textAlign={column.align}>
+                      {/* @ts-ignore */}
+                      {(column.isNumber) && (typeof row[column.dataIndex] === "number") ? numberFormat(row[column.dataIndex]) : row[column.dataIndex]}
+                    </Td>
+                  )
+                  return (
+                    <Td key={index} textAlign={column.align}>
+                      {column.render(row)}
+                    </Td>
+                  )
+                })}
+              </Tr>
+            ))}
+          </Tbody>
+        </ChakraTable>
+      </TableContainer>
+      <HStack alignItems="center" justifyContent="space-between" px={5} py={3}>
+        { footer && <Text fontSize="2xl" px={5} py={3}>{footer}</Text>}
+        <HStack>
+          <PaginateButton
+            pagination={pagination}
+            count={rows.length}
+            onChangePaginate={onChangePaginate}
+            currentPage={currentPage}
+          />
+        </HStack>
+      </HStack>
+    </Box>
   )
 }
 

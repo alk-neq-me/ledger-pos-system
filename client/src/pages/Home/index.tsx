@@ -34,20 +34,30 @@ const columns: Columns<NumbersTable>[] = [
 const table = createNumbeTable(LEDGER_MODE);
 
 function MainTable() {
-  const { rows } = useTypedSelector(state => state.numberTable);
-  const { rows: recents, loading } = useTypedSelector(state => state.recentOrder);
-  const { customerMarker } = useTypedSelector(state => state.marker);
+  const { 
+    rows, 
+    loading: rowLoading,
+    pagination
+  } = useTypedSelector(state => state.numberTable);
+  const { 
+    rows: recents, 
+    loading: recentLoading, 
+    pagination: recentPagination 
+  } = useTypedSelector(state => state.recentOrder);
+  const { customerMarker, loading: markerLoading } = useTypedSelector(state => state.marker);
 
   const dispatch = useTypedDispatch();
 
   /** Test */
-  const { rows: markers } = useTypedSelector(state => state.customers);
+  const { rows: markers, loading: customersLoading } = useTypedSelector(state => state.customers);
 
   const disabled = customerMarker === undefined;
 
+  const loading = rowLoading || recentLoading || markerLoading || customersLoading;
 
   useEffect(() => {
     dispatch(customerActions.fetchCustomers());
+    dispatch(numberTableActions.fetchTable(LEDGER_MODE));
   }, []);
 
 
@@ -80,10 +90,15 @@ function MainTable() {
         footer={`Total ${totalNumberTable(rows)}`}
         columns={columns}
         rows={rows}
+        pagination={pagination}
       />
 
       <VStack>
-        <RecentOrderTable recents={recents} onDelete={onDeleteRecent} />
+        <RecentOrderTable 
+          recents={recents}
+          pagination={recentPagination}
+          onDelete={onDeleteRecent} 
+        />
         <HStack>
           <Button isLoading={loading} isDisabled={disabled} onClick={onOrderBros}>Bro Order</Button>
           <Button isDisabled={disabled} onClick={onOrderNew}>Order New</Button>
