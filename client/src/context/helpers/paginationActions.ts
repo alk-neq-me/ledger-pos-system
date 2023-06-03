@@ -8,7 +8,7 @@ import { UserPrefix } from "../User/types"
 import { AsyncAction } from "../store"
 import { Pagination } from "../types"
 
-type Prefix = 
+export type Prefix = 
   | AuthPrefix
   | CustomerPrefix
   | CustomerMarkerPrefix
@@ -17,13 +17,11 @@ type Prefix =
   | RolePrefix
   | UserPrefix
 
-export const paginationChangePage = (page: number, prefix: Prefix): AsyncAction => async (dispatch, getState) => {
+export const paginationChangeLimit = (limit: number, prefix: Prefix): AsyncAction => async (dispatch) => {
   dispatch({ type: `${prefix}/CHANGE_PAGINATION_PENDING` });
   try {
-    const par = getState().numberTable.pagination.limit;
-    const payload: Pagination = {
-      limit: par,
-      offset: page * par
+    const payload: Partial<Pagination> = {
+      limit
     }
     dispatch({ type: `${prefix}/CHANGE_PAGINATION_SUCCESS`, payload });
   } catch (err) {

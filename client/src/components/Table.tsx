@@ -1,8 +1,10 @@
-import { TableContainer, Table as ChakraTable, Thead, Td, Th, Tr, Tbody, Text, TableContainerProps, IconButton, Checkbox, HStack, Box } from "@chakra-ui/react"
+import { TableContainer, Table as ChakraTable, Thead, Td, Th, Tr, Tbody, Text, TableContainerProps, IconButton, Checkbox, HStack, Box, Select } from "@chakra-ui/react"
 import { useCallback, useState } from "react";
 import { numberFormat } from "../utils/numberFormat";
 import { Pagination } from "../context/types";
 import PaginateButton from "./PaginateButton";
+import { useTypedDispatch } from "../context/store";
+import { Prefix, paginationChangeLimit } from "../context/helpers";
 
 
 export type Columns<T> = {
@@ -21,16 +23,19 @@ interface Props<T> extends TableContainerProps {
   footer?: string,
   columns: Columns<T>[],
   rows: T[],
-  pagination: Pagination
+  pagination: Pagination,
+  prefixTableType: Prefix
 }
 
 function Table<T extends {id: string}>(props: Props<T>) {
-  const { header, columns, onDeleteAction, rows, footer, pagination, ...reset } = props;
+  const { header, columns, onDeleteAction, rows, footer, pagination, prefixTableType, ...reset } = props;
 
   const [sortBy, setSortBy] = useState<keyof T | undefined>(undefined);
   const [desc, setDesc] = useState(false);
   const [selectedRowsId, setSelectedRowsId] = useState<string[]>([]);
   const [currentPage, setCurrentPage] = useState(0);
+
+  const dispatch = useTypedDispatch();
 
   const showColumns = (col: Columns<T>) => !col.hiddenColumn;
 
@@ -90,6 +95,10 @@ function Table<T extends {id: string}>(props: Props<T>) {
     setCurrentPage(Number(idx))
   }
 
+  const onChangePaginateLimit = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    const limit = Number(event.target.value) || 10;
+    dispatch(paginationChangeLimit(limit, prefixTableType));
+  }
 
   return (
     <Box borderWidth={1} borderColor="gray.100" borderRadius={10}>
@@ -141,8 +150,14 @@ function Table<T extends {id: string}>(props: Props<T>) {
         </ChakraTable>
       </TableContainer>
       <HStack alignItems="center" justifyContent="space-between" px={5} py={3}>
-        { footer && <Text fontSize="2xl" px={5} py={3}>{footer}</Text>}
+        { footer && <Text fontSize="xl" px={5} py={3}>{footer}</Text>}
         <HStack>
+          <Select defaultValue={pagination.limit} onChange={onChangePaginateLimit}>
+            <Box as="option" value={5}>5</Box>
+            <Box as="option" value={10}>10</Box>
+            <Box as="option" value={15}>15</Box>
+            <Box as="option" value={20}>20</Box>
+          </Select>
           <PaginateButton
             pagination={pagination}
             count={rows.length}

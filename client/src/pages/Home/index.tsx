@@ -91,6 +91,7 @@ function MainTable() {
         columns={columns}
         rows={rows}
         pagination={pagination}
+        prefixTableType="@@NUMBER_TABLE"
       />
 
       <VStack>

@@ -7,7 +7,7 @@ const initialState: NumbersTableState = {
   filter: undefined,
   pagination: {
     limit: 10,
-    offset: 0
+    offset: 1
   },
   rows: [],
 }
@@ -63,7 +63,7 @@ export default function(
         loading: false,
         pagination: "payload" in action
           ? typeof action.payload === "object" && !Array.isArray(action.payload)
-            ? action.payload
+            ? { ...state.pagination, ...action.payload }
             : state.pagination
           : state.pagination
       }

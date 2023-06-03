@@ -40,6 +40,7 @@ function RecentOrderTable(props: Props) {
         rows={recents}
         onDeleteAction={onDelete}
         pagination={pagination}
+        prefixTableType='@@NUMBER_ORDER'
       />
     </>
   )
