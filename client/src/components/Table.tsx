@@ -45,10 +45,10 @@ function Table<T extends {id: string}>(props: Props<T>) {
 
   const isInputElement = selectedRowsId.length >= 1 && !allChecked;
 
-  const getPaginatedRows = useCallback(() => {
+  const getPaginatedRows = () => {
     const idx = pagination.limit * currentPage;
     return rows.slice(idx, idx + pagination.limit);
-  }, [currentPage, pagination])
+  }
 
   const paginated = getPaginatedRows()
 
