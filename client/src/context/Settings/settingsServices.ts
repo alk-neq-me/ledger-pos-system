@@ -1,3 +1,4 @@
+import { i18n } from "../../i18n";
 import { getLocalStorage, setLocalStorage } from "../../utils/localStorage"
 import { Settings, SettingsPrefix } from "./types"
 
@@ -11,7 +12,9 @@ const initialState: Settings = {
 
 export const settingsServices = {
   async getSettings() {
-    getLocalStorage(prefix, initialState);
+    const settings: Settings = getLocalStorage(prefix, initialState);
+    i18n.load(settings.language);
+    return settings;
   },
 
   async updateSettings(settings: Settings) {
@@ -24,6 +27,16 @@ export const settingsServices = {
       ...data, 
       ledgerMode: data.ledgerMode === "2" ? "3" : "2" 
     };
+    setLocalStorage(prefix, newSettings);
+  },
+
+  async changeLanguage(language: string) {
+    const data: Settings = getLocalStorage(prefix, initialState);
+    const newSettings: Settings = { 
+      ...data, 
+      language
+    };
+    i18n.load(language);
     setLocalStorage(prefix, newSettings);
   }
 }

@@ -19,6 +19,7 @@ export default function settingsReducer(
     case "@@SETTINGS/FETCH_PENDING":
     case "@@SETTINGS/TOGGLE_THEME_PENDING":
     case "@@SETTINGS/TOGGLE_LEDGER_MODE_PENDING":
+    case "@@SETTINGS/CHANGE_LANGUAGE_PENDING":
       return {
         ...state,
         loading: true,
@@ -39,6 +40,20 @@ export default function settingsReducer(
     case "@@SETTINGS/TOGGLE_THEME_SUCCESS":
       return state;
 
+    case "@@SETTINGS/CHANGE_LANGUAGE_SUCCESS":
+      return {
+        ...state,
+        loading: false,
+        settings: {
+          ...state.settings,
+          language: "payload" in action
+            ? typeof action.payload === "string"
+              ? action.payload
+              : state.settings.language
+            : state.settings.language
+        }
+      }
+
     case "@@SETTINGS/TOGGLE_LEDGER_MODE_SUCCESS":
       return {
         ...state,
@@ -52,6 +67,7 @@ export default function settingsReducer(
     case "@@SETTINGS/TOGGLE_THEME_FAILURE":
     case "@@SETTINGS/FETCH_FAILURE":
     case "@@SETTINGS/TOGGLE_LEDGER_MODE_FAILURE":
+    case "@@SETTINGS/CHANGE_LANGUAGE_FAILURE":
       return {
         ...state,
         loading: false,

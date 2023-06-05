@@ -39,4 +39,16 @@ export const settingsActions = {
     }
   },
 
+  changeLanguage: (lang: string): AsyncAction => async (dispatch) => {
+    dispatch({ type: "@@SETTINGS/CHANGE_LANGUAGE_PENDING" });
+    try {
+      await settingsServices.changeLanguage(lang);
+      dispatch({ type: "@@SETTINGS/CHANGE_LANGUAGE_SUCCESS", payload: lang });
+    } catch (err) {
+      let errMessage = "unknown error";
+      if (err instanceof Error) errMessage = err.message;
+      dispatch({ type: "@@SETTINGS/CHANGE_LANGUAGE_FAILURE", payload: errMessage });
+    }
+  },
+
 }

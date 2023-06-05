@@ -1,4 +1,4 @@
-import { Button, FormControl, Input, VStack, Text } from '@chakra-ui/react';
+import { FormControl, Input, VStack } from '@chakra-ui/react';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { ZodType, infer as zodInfer, number, object, string, date } from 'zod';
@@ -6,6 +6,8 @@ import { NumbersOrder } from '../../../context/RecentOrder/types';
 import { useTypedDispatch, useTypedSelector } from '../../../context/store';
 import { recentOrderActions } from '../../../context/RecentOrder/recentOrderActions';
 import { updateRecentToCustomer } from '../../../context/Customer/helpers/updateMarker';
+import Text from '../../Text';
+import Button from '../../Button';
 
 
 const LEDGER_MODE: "2" | "3" = "2";
@@ -51,14 +53,14 @@ function RecentOrder() {
     <VStack>
       <FormControl as="form" onSubmit={method.handleSubmit(onSubmit)}>
         <Input type="number" {...method.register("number")} placeholder='Number' />
-        {errors.number && <Text color="red">{errors.number?.message}</Text>}
+        {errors.number && <Text color="red" text={errors.number?.message} />}
         <Input {...method.register("amount", { valueAsNumber: true })} placeholder='Amount' />
-        {errors.amount && <Text color="red">{errors.amount?.message}</Text>}
+        {errors.amount && <Text color="red" text={errors.amount?.message} />}
 
-        <Button type="submit" isDisabled={disabledForm}>Save</Button>
-        <Button type="button" onClick={() => method.reset()}>Cancel</Button>
+        <Button type="submit" isDisabled={disabledForm} tx="common.save" />
+        <Button type="button" onClick={() => method.reset()} tx="common.cancel" />
 
-        <Button type="button" onClick={() => console.log(customerMarker)}>Log</Button>
+        <Button type="button" onClick={() => console.log(customerMarker)} text="log" />
       </FormControl>
     </VStack>
   )

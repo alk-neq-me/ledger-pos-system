@@ -14,7 +14,8 @@ export type I18n = {
     [K: string]: Translations
   }
   local: string, // keyof I18n["translations"],
-  t: (key: TxPath, options?: I18nOptions) => string
+  t: (key: TxPath, options?: I18nOptions) => string,
+  load: (lang: string) => void
 }
 
 export const i18n: I18n = {
@@ -25,6 +26,9 @@ export const i18n: I18n = {
     let msg = _get(localPrefix, key);
     if (options) msg = strTemplate(_get(localPrefix, key), options);
     return msg;
+  },
+  load(lang) {
+    this.local = lang;
   }
 }
 
