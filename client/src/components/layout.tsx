@@ -1,8 +1,8 @@
 import { Outlet } from "react-router-dom";
-import Header from "./header";
 import { Box } from "@chakra-ui/react";
+import Header from "./header";
 
-function Layout() {
+export default function Layout() {
   return (
     <Box display="flex" flexDir="column" px={20} py={5} gap={10}>
       <Header />
@@ -10,5 +10,3 @@ function Layout() {
     </Box>
   )
 }
-
-export default Layout;

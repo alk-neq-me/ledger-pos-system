@@ -3,7 +3,7 @@ import { Link as RouterLink } from 'react-router-dom';
 import { useTypedSelector } from "../context/store";
 
 
-function Header() {
+export default function Header() {
   const { auth } = useTypedSelector(state => state.auth);
   const { customerMarker } = useTypedSelector(state => state.marker);
 
@@ -25,5 +25,3 @@ function Header() {
     </>
   )
 }
-
-export default Header;

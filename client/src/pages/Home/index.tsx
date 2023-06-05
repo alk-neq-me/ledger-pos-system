@@ -1,4 +1,4 @@
-import { Button, HStack, VStack, Text } from '@chakra-ui/react';
+import { Button, HStack, VStack } from '@chakra-ui/react';
 
 import { useCallback, useEffect } from 'react';
 import Table, { Columns } from '../../components/Table';
@@ -12,6 +12,7 @@ import { numberTableActions } from '../../context/NumberTable/numberTableActions
 import { NumbersTable } from '../../context/NumberTable/types';
 import { customerActions } from '../../context/Customer/customerActions';
 import { brosFunc, createNumbeTable, createOrderRecent, newFunc, totalNumberTable } from '../../utils';
+import Text from '../../components/Text';
 
 
 const LEDGER_MODE: "2" | "3" = "2";
@@ -115,7 +116,7 @@ function MainTable() {
       </VStack>
 
       <VStack>
-        <Text>Markers</Text>
+        <Text tx="common.ok" />
         {markers.map(marker => (
           <Button key={marker.slug} onClick={() => dispatch(customerMarkerActions.selectCustomerMarker(marker, marker.books[0].id))}>{marker.name}</Button>
         ))}

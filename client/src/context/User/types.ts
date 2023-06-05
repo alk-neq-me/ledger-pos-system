@@ -1,5 +1,5 @@
 import { SystemRoleEnum } from "../../utils/permission"
-import { CRUDActions } from "../types"
+import { BaseState, CRUDActions } from "../types"
 
 export type User = {
   id: string,
@@ -14,10 +14,8 @@ export type User = {
 export type UserPrefix = "@@USER"
 
 export type UserState = {
-  loading: boolean,
-  error?: string | undefined,
   rows: User[]
-}
+} & BaseState
 
 
 export type UserAction = CRUDActions<UserPrefix>

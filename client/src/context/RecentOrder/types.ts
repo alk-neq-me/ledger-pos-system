@@ -1,4 +1,4 @@
-import { BaseModel, BaseState, CRUDActions } from "../types"
+import { BaseModel, BaseState, CRUDActions, Pagination } from "../types"
 
 export type NumbersOrder = {
   number: string,
@@ -8,8 +8,10 @@ export type NumbersOrder = {
 export type RecentOrderPrefix = "@@NUMBER_ORDER"
 
 export type NumberOrderState = {
-  rows: NumbersOrder[]
-} & BaseState<NumbersOrder>
+  rows: NumbersOrder[],
+  pagination: Pagination,
+  filter?: Partial<NumbersOrder>
+} & BaseState
 
 export type NumberOrderAction = 
   | CRUDActions<RecentOrderPrefix>

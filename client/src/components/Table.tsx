@@ -170,4 +170,4 @@ function Table<T extends {id: string}>(props: Props<T>) {
   )
 }
 
-export default Table
+export default Table;

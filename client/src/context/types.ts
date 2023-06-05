@@ -6,6 +6,7 @@ import { AuthState } from "./Auth/types"
 import { RoleState } from "./Role/types"
 import { CustomerMarkerState } from "./CustomerMarker/types"
 import { NumbersTableState } from "./NumberTable/types"
+import { SettingsState } from "./Settings/types"
 
 export type RootState = {
   router: RouterState,
@@ -15,7 +16,8 @@ export type RootState = {
   customers: CustomerState,
   marker: CustomerMarkerState,
   auth: AuthState,
-  roles: RoleState
+  roles: RoleState,
+  settings: SettingsState,
 }
 
 export type Pagination = {
@@ -60,11 +62,14 @@ export type CRUDActions<P extends string> =
   | UpdateAction<P>
   | DeleteAction<P>
 
-export type BaseState<T extends object> = {
+export type ExtractAction<P extends string, A extends string> = 
+  | `${P}/${A}_PENDING`
+  | `${P}/${A}_SUCCESS`
+  | `${P}/${A}_FAILURE`
+
+export type BaseState = {
   loading: boolean,
   error?: undefined | string,
-  filter?: Partial<T>,
-  pagination: Pagination,
 }
 
 export type ActionPayload<T, P> = 

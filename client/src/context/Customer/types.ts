@@ -1,5 +1,5 @@
 import { NumbersOrder } from "../RecentOrder/types"
-import { CRUDActions } from "../types"
+import { BaseState, CRUDActions } from "../types"
 
 export type CustomerPrefix = "@@CUSTOMER"
 
@@ -18,9 +18,7 @@ export type Customer = {
 }
 
 export type CustomerState = {
-  loading: boolean,
-  error?: undefined | string,
   rows: Customer[]
-}
+} & BaseState
 
 export type CustomerAction = CRUDActions<CustomerPrefix>

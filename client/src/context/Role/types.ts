@@ -1,11 +1,9 @@
 import { Role } from "../../utils/permission"
-import { CRUDActions } from "../types"
+import { BaseState, CRUDActions } from "../types"
 
 export type RoleState = {
-  loading: boolean,
-  error?: undefined | string,
   rows: Role[]
-}
+} & BaseState
 
 export type RolePrefix = "@@ROLE"
 

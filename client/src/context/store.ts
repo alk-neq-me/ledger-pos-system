@@ -13,6 +13,7 @@ import authReducer from './Auth/authReducer';
 import roleReducer from './Role/roleReducer';
 import customerMarkerReducer from './CustomerMarker/customerMarkerReducer';
 import numberTableReducer from './NumberTable/numberTableReducer';
+import settingsReducer from './Settings/settingsReducer';
 
 export function createRootReducer(history: History) {
   return combineReducers({
@@ -24,6 +25,7 @@ export function createRootReducer(history: History) {
     marker: customerMarkerReducer,
     auth: authReducer,
     roles: roleReducer,
+    setttings: settingsReducer,
   });
 }
 
