@@ -1,6 +1,6 @@
 import { Button, HStack, VStack } from '@chakra-ui/react';
 
-import { useCallback, useEffect } from 'react';
+import { useCallback, useEffect, useMemo } from 'react';
 import Table, { Columns } from '../../components/Table';
 import { useTypedDispatch, useTypedSelector } from '../../context/store';
 import { recentOrderActions } from '../../context/RecentOrder/recentOrderActions';
@@ -13,9 +13,6 @@ import { NumbersTable } from '../../context/NumberTable/types';
 import { customerActions } from '../../context/Customer/customerActions';
 import { brosFunc, createNumbeTable, createOrderRecent, newFunc, totalNumberTable } from '../../utils';
 import Text from '../../components/Text';
-
-
-const LEDGER_MODE: "2" | "3" = "2";
 
 
 const columns: Columns<NumbersTable>[] = [
@@ -32,7 +29,6 @@ const columns: Columns<NumbersTable>[] = [
   }
 ];
 
-const table = createNumbeTable(LEDGER_MODE);
 
 function MainTable() {
   const { 
@@ -40,25 +36,29 @@ function MainTable() {
     loading: rowLoading,
     pagination
   } = useTypedSelector(state => state.numberTable);
+
   const { 
     rows: recents, 
     loading: recentLoading, 
     pagination: recentPagination 
   } = useTypedSelector(state => state.recentOrder);
   const { customerMarker, loading: markerLoading } = useTypedSelector(state => state.marker);
+  const { settings: { ledgerMode }, loading: settingsLoading } = useTypedSelector(state => state.layout);
+
+  const loading = rowLoading || recentLoading || markerLoading || settingsLoading;
+
+  const table = useMemo(() => createNumbeTable(ledgerMode), [ledgerMode]);  // TO MARGE RECENT NUMBERS TO MAIN TABLE
 
   const dispatch = useTypedDispatch();
 
   /** Test */
-  const { rows: markers, loading: customersLoading } = useTypedSelector(state => state.customers);
+  const { rows: markers } = useTypedSelector(state => state.customers);
 
   const disabled = customerMarker === undefined;
 
-  const loading = rowLoading || recentLoading || markerLoading || customersLoading;
-
   useEffect(() => {
     dispatch(customerActions.fetchCustomers());
-    dispatch(numberTableActions.fetchTable(LEDGER_MODE));
+    dispatch(numberTableActions.fetchTable(ledgerMode));  // LEDGER MODE ACTIVATE
   }, []);
 
 
@@ -82,6 +82,7 @@ function MainTable() {
     dispatch(recentOrderActions.removeRecentOrder(ids));
   };
 
+  if (loading) return <Text tx="common.loading" />
 
   return (
     <HStack alignItems="start">

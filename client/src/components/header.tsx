@@ -16,8 +16,10 @@ export default function Header() {
         <Text>Ledger</Text>
         <Text>{auth?.firstName} {markerName}:{markerBook}</Text>
         <List display="flex" gap={5}>
-          <ListItem>
+          <ListItem display="flex" gap={2}>
             <Link as={RouterLink} to="/">Home</Link>
+            <Link as={RouterLink} to="/other">Other</Link>
+            <Link as={RouterLink} to="/settings">Settings</Link>
           </ListItem>
           <ListItem>Hello</ListItem>
         </List>

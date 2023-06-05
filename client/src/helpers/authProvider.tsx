@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import { useTypedDispatch, useTypedSelector } from "../context/store";
 import { authActions } from "../context/Auth/authActions";
 import { roleActions } from "../context/Role/roleActions";
+import Text from "../components/Text";
 
 interface Props {
   children: React.ReactNode
@@ -22,9 +23,9 @@ function AuthProvider(props: Props) {
     dispatch(roleActions.fetchRoles());
   }, []);
 
-  if (loading) return <>"loading..."</>
+  if (loading) return <Text tx="common.loading" />
 
-  if (error) return <>`Error ${error}`</>
+  if (error) return <Text text={`Text ${error}`} />
 
   return <>{children}</>;
 }

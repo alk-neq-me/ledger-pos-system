@@ -6,12 +6,12 @@ const initialState: SettingsState = {
   error: undefined,
   settings: {
     theme: "light",
-    language: localStorage.getItem("@@LANGUAGE") || "en",
+    language: "en",
     ledgerMode: "2"
   }
 }
 
-export default function(
+export default function settingsReducer(
   state: SettingsState = initialState,
   action: ActionPayload<SettingsAction, Settings | string>
 ): SettingsState {
@@ -26,6 +26,16 @@ export default function(
       }
 
     case "@@SETTINGS/FETCH_SUCCESS":
+      return {
+        ...state,
+        loading: false,
+        settings: "payload" in action
+          ? typeof action.payload === "object"
+            ? action.payload
+            : state.settings
+          : state.settings
+      };
+
     case "@@SETTINGS/TOGGLE_THEME_SUCCESS":
       return state;
 

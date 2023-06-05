@@ -5,4 +5,5 @@ export * from './numberFormat';
 export * from './generateNumers';
 export * from './formulaFunctions';
 export * from './createNumberTable';
-export * from './totalNumberTable.ts';
+export * from './totalNumberTable';
+export * from './strTemplate'

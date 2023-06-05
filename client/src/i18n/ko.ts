@@ -8,8 +8,13 @@ const ko: Translations = {
     loading: "로딩 중...",
     error: "오류 발생",
     retry: "다시 시도",
-    noResults: "결과 없음"
+    noResults: "결과 없음",
+    save: "저장"
   },
+
+  settings: {
+    toggle: "#{name} 전환",
+  }
 }
 
 export default ko;

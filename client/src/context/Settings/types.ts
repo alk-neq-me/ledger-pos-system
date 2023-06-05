@@ -10,9 +10,9 @@ export type Settings = {
 
 export type SettingsPrefix = "@@SETTINGS";
 
-export type SettingsState = BaseState & {
+export type SettingsState = {
   settings: Settings
-}
+} & BaseState
 
 export type SettingsAction = 
   | ReadAction<SettingsPrefix>

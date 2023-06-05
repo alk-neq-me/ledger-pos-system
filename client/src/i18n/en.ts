@@ -6,8 +6,13 @@ const en = {
     loading: "Loading...",
     error: "Error",
     retry: "Retry",
-    noResults: "No Results"
+    noResults: "No Results",
+    save: "Save"
   },
+
+  settings: {
+    toggle: "Toggle #{name}"
+  }
 }
 
 export default en;

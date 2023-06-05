@@ -25,7 +25,7 @@ export function createRootReducer(history: History) {
     marker: customerMarkerReducer,
     auth: authReducer,
     roles: roleReducer,
-    setttings: settingsReducer,
+    layout: settingsReducer
   });
 }
 

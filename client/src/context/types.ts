@@ -17,7 +17,7 @@ export type RootState = {
   marker: CustomerMarkerState,
   auth: AuthState,
   roles: RoleState,
-  settings: SettingsState,
+  layout: SettingsState,
 }
 
 export type Pagination = {
