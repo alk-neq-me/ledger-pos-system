@@ -1,9 +1,9 @@
 import { useEffect } from 'react';
-import { NumbersOrder } from '../../../context/RecentOrder/types';
-import { useTypedDispatch, useTypedSelector } from '../../../context/store';
-import Table, { Columns } from '../../Table';
-import { recentOrderActions } from '../../../context/RecentOrder/recentOrderActions';
-import { Pagination } from '../../../context/types';
+import Table, { Columns } from '../Table';
+import { NumbersOrder } from '../../context/RecentOrder/types';
+import { Pagination } from '../../context/types';
+import { useTypedDispatch, useTypedSelector } from '../../context/store';
+import { recentOrderActions } from '../../context/RecentOrder/recentOrderActions';
 
 const columns: Columns<NumbersOrder>[] = [
   { title: "Id", dataIndex: "id", hiddenColumn: true },
@@ -34,7 +34,7 @@ function RecentOrderTable(props: Props) {
 
   return (
     <>
-      <Table 
+      <Table
         header="Recent Table"
         columns={columns}
         rows={recents}

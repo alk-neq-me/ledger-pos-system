@@ -4,8 +4,6 @@ import { useCallback, useEffect, useMemo } from 'react';
 import Table, { Columns } from '../../components/Table';
 import { useTypedDispatch, useTypedSelector } from '../../context/store';
 import { recentOrderActions } from '../../context/RecentOrder/recentOrderActions';
-import RecentOrderTable from '../../components/Home/RecentOrder/RecentOrderTable';
-import RecentOrderForm from '../../components/Home/RecentOrder/RecentOrderForm';
 import PermissionRequired from '../../helpers/permissionRequired';
 import { customerMarkerActions } from '../../context/CustomerMarker/customerMarkerActions';
 import { numberTableActions } from '../../context/NumberTable/numberTableActions';
@@ -13,6 +11,8 @@ import { NumbersTable } from '../../context/NumberTable/types';
 import { customerActions } from '../../context/Customer/customerActions';
 import { brosFunc, createNumbeTable, createOrderRecent, newFunc, totalNumberTable } from '../../utils';
 import Text from '../../components/Text';
+import RecentOrderTable from '../../components/RecentOrder/RecentOrderTable';
+import RecentOrderForm from '../../components/RecentOrder/RecentOrderForm';
 
 
 const columns: Columns<NumbersTable>[] = [
@@ -59,7 +59,7 @@ function MainTable() {
   useEffect(() => {
     dispatch(customerActions.fetchCustomers());
     dispatch(numberTableActions.fetchTable(ledgerMode));  // LEDGER MODE ACTIVATE
-  }, []);
+  }, [ledgerMode]);
 
 
   const onOrderBros = useCallback(() => {
@@ -97,7 +97,7 @@ function MainTable() {
       />
 
       <VStack>
-        <RecentOrderTable 
+        <RecentOrderTable
           recents={recents}
           pagination={recentPagination}
           onDelete={onDeleteRecent} 

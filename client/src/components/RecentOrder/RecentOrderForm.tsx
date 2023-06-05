@@ -2,29 +2,31 @@ import { FormControl, Input, VStack } from '@chakra-ui/react';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { ZodType, infer as zodInfer, number, object, string, date } from 'zod';
-import { NumbersOrder } from '../../../context/RecentOrder/types';
-import { useTypedDispatch, useTypedSelector } from '../../../context/store';
-import { recentOrderActions } from '../../../context/RecentOrder/recentOrderActions';
-import { updateRecentToCustomer } from '../../../context/Customer/helpers/updateMarker';
-import Text from '../../Text';
-import Button from '../../Button';
+import { NumbersOrder } from '../../context/RecentOrder/types';
+import { useTypedDispatch, useTypedSelector } from '../../context/store';
+import { updateRecentToCustomer } from '../../context/Customer/helpers/updateMarker';
+import { recentOrderActions } from '../../context/RecentOrder/recentOrderActions';
+import Text from '../Text';
+import Button from '../Button';
+import { parseInt } from 'lodash';
 
 
-const LEDGER_MODE: "2" | "3" = "2";
 
+function RecentOrderForm() {
+  const { settings } = useTypedSelector(state => state.layout);
 
-const createOrderRecentScheme: ZodType<NumbersOrder> = object({
-  id: string(),
-  number: string({ required_error: "number is required" }).min(2).max(parseInt(LEDGER_MODE, 10)),
-  amount: number({ required_error: "amount is required" }).min(100, { message: "amount must be bigger than 100" }),
-  createdAt: date(),
-  updatedAt: date(),
-});
+  const { ledgerMode } = settings;
 
-type CreateOrderRecentInput = zodInfer<typeof createOrderRecentScheme>;
+  const createOrderRecentScheme: ZodType<NumbersOrder> = object({
+    id: string(),
+    number: string({ required_error: "number is required" }).min(parseInt(ledgerMode, 10)).max(parseInt(ledgerMode, 10)),
+    amount: number({ required_error: "amount is required" }).min(100, { message: "amount must be bigger than 100" }),
+    createdAt: date(),
+    updatedAt: date(),
+  });
 
+  type CreateOrderRecentInput = zodInfer<typeof createOrderRecentScheme>;
 
-function RecentOrder() {
   const method = useForm<CreateOrderRecentInput>({
     resolver: zodResolver(createOrderRecentScheme),
     defaultValues: {
@@ -66,4 +68,4 @@ function RecentOrder() {
   )
 }
 
-export default RecentOrder;
+export default RecentOrderForm;
